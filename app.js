@@ -42,8 +42,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.get("/", function(req, res){
-  res.render("home");
-});
+    if (req.isAuthenticated()){
+      res.redirect("/userHomepage");
+    } else {
+      res.redirect("/login");
+    }
+  });
 
 app.get("/login", function(req, res){
   res.render("login");
@@ -53,10 +57,10 @@ app.get("/register", function(req, res){
   res.render("register");
 });
 
-app.get("/userLoggedIn", function(req, res){
+app.get("/userHomepage", function(req, res){
   if (req.isAuthenticated()){
     console.log(req)
-    res.render("submit", {userData: req.user});
+    res.render("userHomepage", {userData: req.user});
   } else {
     res.redirect("/login");
   }
@@ -80,7 +84,7 @@ app.post("/submit", function(req,res){
             if (foundUser) {
                 foundUser.motto = submittedMotto
                 foundUser.save(function(){
-                    res.redirect("/userLoggedIn")
+                    res.redirect("/userHomepage")
                 })
             } 
           }
@@ -100,7 +104,7 @@ app.post("/register", function(req, res){
       res.redirect("/register");
     } else {
       passport.authenticate("local")(req, res, function(){
-        res.redirect("/userLoggedIn");
+        res.redirect("/userHomepage");
       });
     }
   });
@@ -117,9 +121,10 @@ app.post("/login", function(req, res){
   req.login(user, function(err){
     if (err) {
       console.log(err);
+      res.redirect("/login")
     } else {
       passport.authenticate("local")(req, res, function(){
-        res.redirect("/userLoggedIn");
+        res.redirect("/userHomepage");
       });
     }
   });
