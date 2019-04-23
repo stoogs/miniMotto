@@ -1,11 +1,13 @@
 <%- include('partials/header') %>
 
 <div class="submit">
-  
+  <h1> Welcome <%= userData.username %> </h1>
+  <h1> Previous Motto is:</h1>
+  <h3> <%= userData.motto %> </h3>
+
     <p>Add a motto</p>
 
     <form action="/submit" method="POST">
-
       <div class="form-group">
         <input type="text" name="addAMotto" placeholder="What's your motto?">
       </div>

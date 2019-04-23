@@ -56,10 +56,7 @@ app.get("/register", function(req, res){
 app.get("/userLoggedIn", function(req, res){
   if (req.isAuthenticated()){
     console.log(req)
-
-
-
-    res.render("submit");
+    res.render("submit", {userData: req.user});
   } else {
     res.redirect("/login");
   }
