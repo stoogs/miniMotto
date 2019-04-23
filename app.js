@@ -29,7 +29,7 @@ mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema ({
   email: String,
   password: String,
-  motto: String
+  motto: [String]
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -68,7 +68,7 @@ app.get("/userHomepage", function(req, res){
 
 app.get("/submit", function(req,res){
     if (req.isAuthenticated()){
-        res.render("submit")
+        res.render("submit", {userData: req.user})
     } else {
         res.redirect("/login");
       }
@@ -82,7 +82,7 @@ app.post("/submit", function(req,res){
             console.log(err);
           } else {
             if (foundUser) {
-                foundUser.motto = submittedMotto
+                foundUser.motto.push(submittedMotto);
                 foundUser.save(function(){
                     res.redirect("/userHomepage")
                 })
