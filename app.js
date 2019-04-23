@@ -25,11 +25,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/mmUserDB", {useNewUrlParser: true});
+
 mongoose.set("useCreateIndex", true);
+
 const userSchema = new mongoose.Schema ({
   email: String,
   password: String,
-  motto: [String]
+  motto : [ {category: String, motto: String} ]
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -59,7 +61,7 @@ app.get("/register", function(req, res){
 
 app.get("/userHomepage", function(req, res){
   if (req.isAuthenticated()){
-    console.log(req)
+    // console.log(req)
     res.render("userHomepage", {userData: req.user});
   } else {
     res.redirect("/login");
@@ -76,13 +78,13 @@ app.get("/submit", function(req,res){
 
 app.post("/submit", function(req,res){
     const submittedMotto = req.body.addAMotto;
-
+    
     User.findById(req.user.id, function(err, foundUser){
         if (err) {
             console.log(err);
           } else {
             if (foundUser) {
-                foundUser.motto.push(submittedMotto);
+                foundUser.motto.push( {category: "Category",motto: submittedMotto} );
                 foundUser.save(function(){
                     res.redirect("/userHomepage")
                 })
