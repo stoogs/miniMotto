@@ -28,7 +28,8 @@ mongoose.connect("mongodb://localhost:27017/mmUserDB", {useNewUrlParser: true});
 mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema ({
   email: String,
-  password: String
+  password: String,
+  motto: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -54,11 +55,40 @@ app.get("/register", function(req, res){
 
 app.get("/userLoggedIn", function(req, res){
   if (req.isAuthenticated()){
-    res.render("userLoggedIn");
+    console.log(req)
+
+
+
+    res.render("submit");
   } else {
     res.redirect("/login");
   }
 });
+
+app.get("/submit", function(req,res){
+    if (req.isAuthenticated()){
+        res.render("submit")
+    } else {
+        res.redirect("/login");
+      }
+});
+
+app.post("/submit", function(req,res){
+    const submittedMotto = req.body.addAMotto;
+
+    User.findById(req.user.id, function(err, foundUser){
+        if (err) {
+            console.log(err);
+          } else {
+            if (foundUser) {
+                foundUser.motto = submittedMotto
+                foundUser.save(function(){
+                    res.redirect("/userLoggedIn")
+                })
+            } 
+          }
+    })
+})
 
 app.get("/logout", function(req, res){
   req.logout();
