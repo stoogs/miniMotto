@@ -17,16 +17,17 @@
     <h1> Welcome <%= userData.username %> </h1>
     <h1> Previous Motto is:</h1>
     
-    <% userData.motto.forEach( motto => { %>
+    <% userData.posts.forEach( motto => { %>
       <h2> <%= motto.category %> </h2>
       <h4> <%= motto.motto %> </h4>
-
+      <h6> <%= motto %> </h6>
+   
         <form action="/delete" method="post">
             <input type="hidden" name="id" value="<%= motto.id %> ">
             <button type="submit">DELETE</button>
           </form>
+    
     <% }) %>
-   
 </div>
 
 <%- include('partials/footer') %>

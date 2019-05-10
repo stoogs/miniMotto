@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const PostSchema = require('./src/post')
 
 const app = express();
 
@@ -31,9 +32,10 @@ mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema ({
   email: String,
   password: String,
-  motto : [ {category: String, motto: String,
-    mottoDate: { type: Date, default: Date.now } } ],
-  userCreatedDate: { type: Date, default: Date.now } 
+  userCreatedDate: { type: Date, default: Date.now },
+  posts: [ PostSchema ]
+  // motto : [ {category: String, motto: String,
+  //   mottoDate: { type: Date, default: Date.now } } ],
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -86,7 +88,8 @@ app.post("/submit", function(req,res){
             console.log(err);
           } else {
             if (foundUser) {
-                foundUser.motto.push( {category: categoryMotto,motto: submittedMotto} );
+                foundUser.posts.push( 
+                  {category: categoryMotto, motto: submittedMotto});
                 foundUser.save(function(){
                     res.redirect("/userHomepage")
                 })
