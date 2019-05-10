@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<div class="testPAge">
+    
+    <h1>Test Page</h1>
+    
+    <form action="/test" method="POST">
+        <div class="form-group">
+          <label for="text">Username</label>
+          <input type="text" name="username">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password">
+        </div>
+        <button type="submit" >Create New User</button>
+      </form>
+     
+      <% userData.forEach( user => { %>
+        <h4> <%= user.username %> </h4>
+        <h4> <%= user.motto %> </h4>
+        <button name="deleteUser" type="submit" >Delete User</button>
+    <% }) %>
+
+</div>
+
+<%- include('partials/footer') %>

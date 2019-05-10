@@ -4,15 +4,28 @@
     
     <h1>Now Logged In</h1>
 
+    <form action="/submit" method="POST">
+      <div class="form-group">
+        <input type="text" name="categoryMotto" placeholder="What Category?">
+        <input type="text" name="addAMotto" placeholder="What's your motto?">
+      </div>
+      <button type="submit" >Submit</button>
+    </form>
+
+    <%  %>
+
     <h1> Welcome <%= userData.username %> </h1>
     <h1> Previous Motto is:</h1>
     
     <% userData.motto.forEach( motto => { %>
-        <h4> <%= motto.category %> </h4>
-        <h4> <%= motto.motto %> </h4>
+      <h2> <%= motto.category %> </h2>
+      <h4> <%= motto.motto %> </h4>
+
+        <form action="/delete" method="post">
+            <input type="hidden" name="id" value="<%= motto.id %> ">
+            <button type="submit">DELETE</button>
+          </form>
     <% }) %>
-    
-    <a href="/submit" role="button">Submit</a>
    
 </div>
 
