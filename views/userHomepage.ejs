@@ -6,17 +6,25 @@
 
     <form action="/submit" method="POST">
       <div class="form-group">
-        <input type="text" name="categoryMotto" placeholder="What Category?">
+        <label for="categoryMotto">Category</label>
+        <input heading="Category" type="text" name="categoryMotto" placeholder="What Category?">
+        <br>
+        <label for="addaMotto">Motto</label>
         <input type="text" name="addAMotto" placeholder="What's your motto?">
       </div>
       <button type="submit" >Submit</button>
     </form>
 
-    <%  %>
+    <% let strippedUserName = userData.username.split('@').slice(0,1) %>
 
-    <h1> Welcome <%= userData.username %> </h1>
+    <h1> Welcome <%= strippedUserName %> </h1>
     <h1> Previous Motto is:</h1>
     
+    <% userData.posts.sort(function(a,b){
+      let dateA = new Date(a.mottoDate), dateB = new Date(b.mottoDate);
+      return dateB - dateA;
+    }); %>
+
     <% userData.posts.forEach( motto => { %>
       <h2> <%= motto.category %> </h2>
       <h4> <%= motto.motto %> </h4>
