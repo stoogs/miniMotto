@@ -132,11 +132,18 @@ app.get('/test', function(req,res){
     });
 });
 
-app.delete('/test', function(req,res){
-    console.log("DELETE");
-    console.log(req,res)
-    res.redirect("/test");
-})
+app.post('/delete', function(req, res) {
+    const id = req.body.id;
+    Post.findByIdAndRemove(id, function (err, deleteId) {
+       // handle any potential errors here
+       res.redirect('/userHomepage');        
+     });
+});
+
+// app.delete('/test', function(req,res){
+//    res.redirect("/test");
+//})
+
 app.post('/test', function(req,res){
     const user = new User({
         username: req.body.username,
