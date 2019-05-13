@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const PostSchema = require('./src/post')
+//var ObjectId = require('mongodb').ObjectID;
 
 const app = express();
 
@@ -41,6 +42,7 @@ const userSchema = new mongoose.Schema ({
 userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
+const Post = new mongoose.model("Post", PostSchema);
 
 passport.use(User.createStrategy());
 
@@ -133,16 +135,17 @@ app.get('/test', function(req,res){
 });
 
 app.post('/delete', function(req, res) {
-    const id = req.body.id;
-    Post.findByIdAndRemove(id, function (err, deleteId) {
-       // handle any potential errors here
-       res.redirect('/userHomepage');        
-     });
-});
+  const itemID = req.body.id.trim()
+  User.findOneAndDelete( itemID, function(err){
+      if(err){
+        console.log(err.message,"Error Deleting", req.body.id)
+      } else {
+        console.log("DELETED!!", itemID);
+      }
+  })
+    res.redirect("/userHomepage")  
+})
 
-// app.delete('/test', function(req,res){
-//    res.redirect("/test");
-//})
 
 app.post('/test', function(req,res){
     const user = new User({
