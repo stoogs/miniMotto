@@ -16,6 +16,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(bodyParser.json());
 
 app.use(session({
   secret: process.env.KEY,
@@ -134,15 +135,21 @@ app.get('/test', function(req,res){
     });
 });
 
-app.post('/delete', function(req, res) {
-  const itemID = req.body.id.trim()
-  User.findOneAndDelete( itemID, function(err){
-      if(err){
-        console.log(err.message,"Error Deleting", req.body.id)
-      } else {
-        console.log("DELETED!!", itemID);
-      }
+app.post("/deleteAll",function(req, res) {
+  Post.deleteMany(function(err){
+    if(!err)
+    console.log("DELETED ALL"); 
   })
+})
+
+app.post('/delete', function(req, res) {
+  const item = req.body.id.trim()
+  const user = req.body.user.trim()
+
+  User.findByIdAndUpdate(user, {
+    $pull: { posts: { _id: item} }
+  })
+
     res.redirect("/userHomepage")  
 })
 
